@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mad/data/db_manager.dart';
 import 'package:mad/data/file_storage_manager.dart';
 import 'package:mad/data/shared_pref_manager.dart';
 import 'package:mad/screens/home_screen.dart';
@@ -10,12 +11,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FileStorageManager.instance.initFileStorage();
-  await FileStorageManager.instance.saveToFileStorage("bookId=1,price=10000,qty=1");
-  List<String> items = await FileStorageManager.instance.readFromFileStorage();
-  for(String i in items){
-    print("Items $i");
-  }
+  await DBManager.instance.database;
+  // await FileStorageManager.instance.initFileStorage();
+  // await FileStorageManager.instance.saveToFileStorage("bookId=1,price=10000,qty=1");
+  // List<String> items = await FileStorageManager.instance.readFromFileStorage();
+  // for(String i in items){
+  //   print("Items $i");
+  // }
   runApp(MyApp());
 }
 
