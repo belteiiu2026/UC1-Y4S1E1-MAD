@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mad/login_screen.dart';
+import 'package:mad/screens/main_screen.dart';
 import 'package:mad/widgets/app_logo.dart';
 
 class StartupScreen extends StatelessWidget {
@@ -18,7 +18,7 @@ class StartupScreen extends StatelessWidget {
           style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0997A4)),
           onPressed: () {
             final route = MaterialPageRoute(
-              builder: (BuildContext context) => LoginScreen(),
+              builder: (BuildContext context) => MainScreen(),
             );
             Navigator.pushReplacement(context, route);
           },

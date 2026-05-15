@@ -1,17 +1,60 @@
+
 import 'package:flutter/material.dart';
+import 'package:mad/data/shared_pref_manager.dart';
+import 'package:mad/screens/login_screen.dart';
 import 'package:mad/widgets/app_logo.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
-  State<StatefulWidget> createState() => _State();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _State extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+
+  final fullNameCtrl = TextEditingController();
+  final usernameCtrl = TextEditingController();
+  final passwordCtrl = TextEditingController();
+
+  void _navigateToLogin() {
+    final route = MaterialPageRoute(builder: (BuildContext context) => LoginScreen());
+    Navigator.pushReplacement(context, route);
+  }
+
+  Future<void> _onRegisterHandler() async {
+    String fullName = fullNameCtrl.text;
+    String username = usernameCtrl.text;
+    String password = passwordCtrl.text;
+    print("fullName : $fullName , Username : $username, Password : $password");
+    await SharedPrefManager.instance.savePref("fullName", fullName);
+    await SharedPrefManager.instance.savePref("username", username);
+    await SharedPrefManager.instance.savePref("password", password);
+    final snackBar = SnackBar(content: Text("Register success."));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    _navigateToLogin();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    final fullName = Padding(
+      padding: EdgeInsets.only(left: 16, right: 16),
+      child: TextFormField(
+        controller: fullNameCtrl,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
+          hintText: 'Full Name',
+          prefixIcon: Icon(Icons.account_circle)
+        ),
+      ),
+    );
+
+
     final username = Padding(
       padding: EdgeInsets.only(left: 16, right: 16),
       child: TextFormField(
+        controller: usernameCtrl,
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
           hintText: 'Email',
@@ -24,6 +67,7 @@ class _State extends State<LoginScreen> {
     final password = Padding(
       padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
       child: TextFormField(
+        controller: passwordCtrl,
         obscureText: false,
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(50)),
@@ -34,14 +78,17 @@ class _State extends State<LoginScreen> {
       ),
     );
 
-    final loginButton = Padding(
+    final registerButton = Padding(
       padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: SizedBox(
         height: 40,
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0997A4)),
-          onPressed: () {},
+          onPressed: _onRegisterHandler,
           child: Text("ចូលប្រើប្រាស់", style: TextStyle(color: Colors.white)),
         ),
       ),
@@ -62,8 +109,10 @@ class _State extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("មិនមានគណនីទេ?"),
-          TextButton(onPressed: () {}, child: Text("ចុះឈ្មោះ")),
+          Text("មានគណនីរួចហើយ?"),
+          TextButton(onPressed: () {
+            _navigateToLogin();
+          }, child: Text("ចូលប្រើប្រាស់")),
         ],
       ),
     );
@@ -83,7 +132,7 @@ class _State extends State<LoginScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(Icons.facebook, color: Colors.blue,),
-        Icon(Icons.g_mobiledata_outlined, color: Colors.red,size: 40,)
+        Icon(Icons.g_mobiledata_outlined, color: Colors.red, size: 40,)
       ],
     );
 
@@ -94,12 +143,14 @@ class _State extends State<LoginScreen> {
           children: [
             logo,
             SizedBox(height: 30),
+            fullName,
+            SizedBox(height: 10),
             username,
             SizedBox(height: 10),
             password,
             forgetPasswordButton,
             SizedBox(height: 10),
-            loginButton,
+            registerButton,
             noAccountButton,
             _orSocialWidget,
             _facebookAndGoogle
