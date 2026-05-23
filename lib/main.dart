@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mad/data/db_manager.dart';
 import 'package:mad/data/file_storage_manager.dart';
 import 'package:mad/data/shared_pref_manager.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.

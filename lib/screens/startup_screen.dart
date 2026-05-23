@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mad/screens/main_screen.dart';
 import 'package:mad/widgets/app_logo.dart';
 
@@ -17,10 +18,14 @@ class StartupScreen extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF0997A4)),
           onPressed: () {
-            final route = MaterialPageRoute(
-              builder: (BuildContext context) => MainScreen(),
-            );
-            Navigator.pushReplacement(context, route);
+
+            // final route = MaterialPageRoute(
+            //   builder: (BuildContext context) => MainScreen(),
+            // );
+            // Navigator.pushReplacement(context, route);
+
+            // Route
+            Get.off(MainScreen());
           },
           child: Text("ចាប់ផ្តើម", style: TextStyle(color: Colors.white)),
         ),

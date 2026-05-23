@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mad/controller/cart_controller.dart';
 import 'package:mad/data/shared_pref_manager.dart';
 import 'package:mad/screens/product_detail_screen.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String fullName = "Guest";
+
+  final CartController cartController = Get.put(CartController());
 
   @override
   void initState() {
@@ -27,6 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cartWidget = badges.Badge(
+      badgeContent: Obx(() => Text("${cartController.cartList.value.length}")),
+      child: Icon(Icons.shopping_cart),
+    );
+
     final title = Text(
       "Hello, $fullName",
       style: TextStyle(
@@ -49,8 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 160,
           ),
         ),
-        onTap: (){
-          final route = MaterialPageRoute(builder: (BuildContext context) => ProductDetailScreen());
+        onTap: () {
+          final route = MaterialPageRoute(
+            builder: (BuildContext context) => ProductDetailScreen(),
+          );
           Navigator.push(context, route);
         },
       );
@@ -79,11 +91,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(elevation: 3),
+      appBar: AppBar(
+        elevation: 3,
+        title: title,
+        backgroundColor: Colors.white,
+        actions: [
+          cartWidget,
+          Padding(
+            padding: EdgeInsets.only(left: 8, right: 8),
+            child: Icon(Icons.notifications),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: ListView(
           children: [
-            title,
             description,
             SizedBox(
               height: 200,

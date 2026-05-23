@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mad/controller/cart_controller.dart';
 import 'package:mad/model/cart.dart';
 import 'package:mad/services/cart_service.dart';
 
@@ -11,6 +13,7 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
+  final CartController cartController  = Get.put(CartController());
 
   Future<void> _addProductToCart() async {
 
@@ -20,8 +23,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       qty: 1,
       discount: 0
     );
-    await CartService.instance.insertProductToCart(cart);
+    // await CartService.instance.insertProductToCart(cart);
+    cartController.addProductToCart(cart);
     print("Insert success");
+
   }
 
   @override
