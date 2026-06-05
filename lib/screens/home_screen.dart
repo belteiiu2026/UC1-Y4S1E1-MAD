@@ -4,6 +4,7 @@ import 'package:mad/controller/cart_controller.dart';
 import 'package:mad/data/shared_pref_manager.dart';
 import 'package:mad/screens/product_detail_screen.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:mad/services/product_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,10 +18,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final CartController cartController = Get.put(CartController());
 
+  List<dynamic> _products = [];
+
   @override
   void initState() {
     super.initState();
     _loadFullName();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    final products = await ProductService.instance.getProducts();
+     setState(() {
+       _products = products;
+     });
   }
 
   Future<void> _loadFullName() async {
@@ -50,13 +61,25 @@ class _HomeScreenState extends State<HomeScreen> {
       style: TextStyle(fontSize: 14, color: Colors.black45),
     );
 
-    List<Widget> productList = List.generate(10, (i) {
+
+
+    List<Widget> productList = List.generate(_products.length, (i) {
+
+      Map<String,dynamic> product = _products[i];
+
+
       return GestureDetector(
         child: Card(
-          child: Image.asset(
-            "assets/images/book1.png",
+          child: Image.network(
+            "${product["image"]}",
             fit: BoxFit.cover,
             width: 160,
+            errorBuilder: (context, child, loadingProgress){
+              return Center(child: Text("Error Loading"),);
+            },
+            // loadingBuilder: (context, child, loadingProgress){
+            //   return CircularProgressIndicator();
+            // },
           ),
         ),
         onTap: () {
