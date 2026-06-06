@@ -9,12 +9,9 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-
-
   Future<void> _logoutHandler() async {
     await SharedPrefManager.instance.remove("fullName");
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +29,62 @@ class _AccountScreenState extends State<AccountScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(elevation: 3, title: Text("Account"), centerTitle: true),
+      appBar: AppBar(title: Text("Profile"), centerTitle: true),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: Column(
                 children: [
-                  ListTile(title: Text("MAD"), subtitle: Text("Full Name")),
+                  Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(
+                          'assets/images/default-avatar-profile.avif',
+                        ),
+                      ),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.account_circle),
+                    title: Text("Chhai Chivon"),
+                    subtitle: Text("Full Name"),
+                    trailing: Icon(Icons.navigate_next),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.mail),
+                    title: Text("mad@gmail.com"),
+                    subtitle: Text("Email"),
+                    trailing: Icon(Icons.navigate_next),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.shopping_cart),
+                    title: Text("Order"),
+                    subtitle: Text("Cart"),
+                    trailing: Icon(Icons.navigate_next),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.light_mode),
+                    title: Text("Light"),
+                    subtitle: Text("Theme"),
+                    trailing: Icon(Icons.navigate_next),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.language),
+                    title: Text("English"),
+                    subtitle: Text("Language"),
+                    trailing: Icon(Icons.navigate_next),
+                  ),
                   Divider(),
                 ],
               ),

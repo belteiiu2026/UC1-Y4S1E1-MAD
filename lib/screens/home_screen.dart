@@ -97,6 +97,28 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }).toList();
 
+    final newlyTitleRow = Padding(
+      padding: EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Newly",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          Row(
+            children: [
+              Text(
+                "Next",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              Icon(Icons.navigate_next),
+            ],
+          ),
+        ],
+      ),
+    );
+
     final popularRow = Padding(
       padding: EdgeInsets.only(left: 16, right: 16),
       child: Row(
@@ -104,13 +126,13 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Text(
             "Popular",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
           Row(
             children: [
               Text(
                 "Next",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               Icon(Icons.navigate_next),
             ],
@@ -180,6 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             menuListRow,
+            newlyTitleRow,
             SizedBox(
               height: 200,
               child: SingleChildScrollView(
