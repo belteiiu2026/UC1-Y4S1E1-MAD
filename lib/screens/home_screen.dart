@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mad/controller/cart_controller.dart';
 import 'package:mad/data/shared_pref_manager.dart';
+import 'package:mad/model/product.dart';
 import 'package:mad/screens/product_detail_screen.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:mad/services/product_service.dart';
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final CartController cartController = Get.put(CartController());
 
-  List<dynamic> _products = [];
+  List<Product> _products = [];
 
   @override
   void initState() {
@@ -29,9 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadProducts() async {
     final products = await ProductService.instance.getProducts();
-     setState(() {
-       _products = products;
-     });
+    setState(() {
+      _products = products;
+    });
   }
 
   Future<void> _loadFullName() async {
@@ -56,30 +57,35 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.red,
       ),
     );
-    final description = Text(
-      "What do you want to read today?",
-      style: TextStyle(fontSize: 14, color: Colors.black45),
+    final description = Padding(
+      padding: EdgeInsets.only(left: 16),
+      child: Text(
+        "What do you want to read today?",
+        style: TextStyle(fontSize: 14, color: Colors.black45),
+      ),
     );
 
-
-
     List<Widget> productList = List.generate(_products.length, (i) {
-
-      Map<String,dynamic> product = _products[i];
-
+      Product product = _products[i];
 
       return GestureDetector(
         child: Card(
           child: Image.network(
-            "${product["image"]}",
+            "${product.image}",
             fit: BoxFit.cover,
             width: 160,
-            errorBuilder: (context, child, loadingProgress){
-              return Center(child: Text("Error Loading"),);
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null)
+                return child; // Image loaded completely
+              return Image.asset(
+                'assets/images/default-image-cover.jpg',
+              ); // While loading
             },
-            // loadingBuilder: (context, child, loadingProgress){
-            //   return CircularProgressIndicator();
-            // },
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                'assets/images/default-image-cover.jpg',
+              ); // If network fails
+            },
           ),
         ),
         onTap: () {
@@ -113,11 +119,46 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
+    final searchWidget = Padding(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+      child: TextField(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+          hintText: 'Search...',
+          suffixIcon: Icon(Icons.search),
+        ),
+      ),
+    );
+
+    List<String> menuArr = ["All", "ប្រលោមលោក", "បច្ចេកវិទ្យា", "សាសនា"];
+
+    List<Widget> menuList = List.generate(menuArr.length, (i) {
+      return Container(
+        width: 100,
+        child: TextButton(
+          onPressed: () {
+
+          },
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent),
+          child: Text("${menuArr[i]}", style: TextStyle(color: Colors.white),),
+        ),
+      );
+    });
+    final menuListRow = SizedBox(
+      height: 40,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: menuList,
+        ),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
-        elevation: 3,
         title: title,
-        backgroundColor: Colors.white,
         actions: [
           cartWidget,
           Padding(
@@ -130,6 +171,15 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           children: [
             description,
+            searchWidget,
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                "Category",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+            ),
+            menuListRow,
             SizedBox(
               height: 200,
               child: SingleChildScrollView(

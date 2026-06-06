@@ -1,35 +1,39 @@
+import 'package:json_annotation/json_annotation.dart';
 
+part 'product.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class Product {
   int? id;
-  String? name;
+  String? title;
   String? description;
-  double? price;
-  int? discount;
-  int? rate;
-  bool? stock;
+  num? price;
+  String? image;
 
   Product({
-    this.id, this.name, this.description, this.price, this.discount,this.rate, this.stock
+    this.id, this.title, this.description, this.price, this.image
 });
 
-  Map<String , dynamic> toMap() =>
-     {
-      "id": id,
-      "name": name,
-      "description" : description,
-      "price" : price,
-      "discount" : discount,
-      "rate" : rate,
-      "stock" : stock
-    };
+  // Manual Serialization
+  // Map<String , dynamic> toMap() =>
+  //    {
+  //     "id": id,
+  //     "title": title,
+  //     "description" : description,
+  //     "price" : price,
+  //     "image" : image
+  //   };
+  //
+  // factory Product.fromMap(Map<String,dynamic> map) => Product(
+  //   id: map["id"],
+  //     title: map["title"],
+  //   description: map["description"],
+  //   price: map["price"],
+  //     image: map["image"]
+  // );
 
-  factory Product.fromMap(Map<String,dynamic> map) => Product(
-    id: map["id"],
-    name: map["name"],
-    description: map["description"],
-    price: map["price"],
-    discount: map["discount"],
-    rate: map["rate"],
-    stock: map["stock"]
-  );
+  // Auto Serialization
+  Map<String , dynamic> toJson() => _$ProductToJson(this);
+
+  factory Product.fromJson(Map<String,dynamic> json) => _$ProductFromJson(json);
 }
