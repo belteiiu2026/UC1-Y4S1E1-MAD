@@ -1,5 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mad/data/shared_pref_manager.dart';
+import 'package:mad/screens/login_screen.dart';
+import 'package:mad/screens/main_screen.dart';
+import 'package:mad/services/auth_service.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -9,8 +14,37 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+
+  String fullName = "Guest";
+  bool isCurrentUserLogin = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentUser();
+  }
+
+  Future<void> _loadCurrentUser() async{
+    User? user = await AuthService.instance.getCurrentUser();
+    setState(() {
+      fullName = (user?.displayName ?? user?.phoneNumber ?? user?.email)!;
+      isCurrentUserLogin = true;
+    });
+  }
+
+  Future<void> _onCheckCurrentLogin() async{
+      User? user = await AuthService.instance.getCurrentUser();
+      if(user == null){
+         Get.to(LoginScreen());
+      }
+  }
+
   Future<void> _logoutHandler() async {
-    await SharedPrefManager.instance.remove("fullName");
+    User? user = await AuthService.instance.getCurrentUser();
+    if(user != null){
+       await AuthService.instance.logout();
+       Get.offAll(MainScreen());
+    }
   }
 
   @override
@@ -53,16 +87,10 @@ class _AccountScreenState extends State<AccountScreen> {
                   Divider(),
                   ListTile(
                     leading: Icon(Icons.account_circle),
-                    title: Text("Chhai Chivon"),
+                    title: Text("$fullName"),
                     subtitle: Text("Full Name"),
                     trailing: Icon(Icons.navigate_next),
-                  ),
-                  Divider(),
-                  ListTile(
-                    leading: Icon(Icons.mail),
-                    title: Text("mad@gmail.com"),
-                    subtitle: Text("Email"),
-                    trailing: Icon(Icons.navigate_next),
+                    onTap: _onCheckCurrentLogin,
                   ),
                   Divider(),
                   ListTile(
@@ -89,7 +117,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ],
               ),
             ),
-            logoutButton,
+            isCurrentUserLogin ? logoutButton : Container(),
           ],
         ),
       ),

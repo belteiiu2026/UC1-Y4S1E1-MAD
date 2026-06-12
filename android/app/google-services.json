@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "1027220963414",
+    "firebase_url": "https://beltei-default-rtdb.firebaseio.com",
+    "project_id": "beltei",
+    "storage_bucket": "beltei.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027220963414:android:824773268b7951768f7bf7",
+        "android_client_info": {
+          "package_name": "kh.edu.beltei.mad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027220963414-piij6h3e0geuhnib28483j0g297jencg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7zBVe3DmhLcoaTbK0y58wiGXw4LgZuWM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027220963414-piij6h3e0geuhnib28483j0g297jencg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1027220963414-6hls0n1m074ot1vqrgum21cvb6ngf6c0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mad2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027220963414:android:78aca012b9ae447b8f7bf7",
+        "android_client_info": {
+          "package_name": "kh.edu.beltei.mad.e1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027220963414-piij6h3e0geuhnib28483j0g297jencg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7zBVe3DmhLcoaTbK0y58wiGXw4LgZuWM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027220963414-piij6h3e0geuhnib28483j0g297jencg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1027220963414-6hls0n1m074ot1vqrgum21cvb6ngf6c0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mad2"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mad/controller/cart_controller.dart';
@@ -5,6 +6,7 @@ import 'package:mad/data/shared_pref_manager.dart';
 import 'package:mad/model/product.dart';
 import 'package:mad/screens/product_detail_screen.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:mad/services/auth_service.dart';
 import 'package:mad/services/product_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,11 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadFullName() async {
-    String? _fullName = await SharedPrefManager.instance.getPref("fullName");
+    User? user = await AuthService.instance.getCurrentUser();
     setState(() {
-      fullName = _fullName;
+      fullName = user!.displayName ?? user.phoneNumber ?? user.email ?? fullName;
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

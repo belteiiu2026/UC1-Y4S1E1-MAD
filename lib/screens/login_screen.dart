@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mad/data/shared_pref_manager.dart';
 import 'package:mad/screens/home_screen.dart';
+import 'package:mad/screens/main_screen.dart';
 import 'package:mad/screens/register_screen.dart';
+import 'package:mad/services/auth_service.dart';
 import 'package:mad/widgets/app_logo.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,25 +33,20 @@ class _State extends State<LoginScreen> {
   }
 
   Future<void> _onLoginHandler() async {
-    String username = usernameCtrl.text;
-    String password = passwordCtrl.text;
+    String username = usernameCtrl.text.trim();
+    String password = passwordCtrl.text.trim();
     print("Username : $username, Password : $password");
-    String user = await SharedPrefManager.instance.getPref("username");
-    String pass = await SharedPrefManager.instance.getPref("password");
     if (_keyForm.currentState!.validate()) {
-      if (user == username && pass == password) {
+      UserCredential userCredential = await AuthService.instance.loginWithEmailAndPassword(username, password);
+      if (userCredential.user != null) {
         final snackBar = SnackBar(content: Text("Login success."));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-        final route = MaterialPageRoute(builder: (BuildContext context) => HomeScreen());
-        Navigator.pushReplacement(context, route);
-
+        Get.offAll(MainScreen());
       } else {
         final snackBar = SnackBar(content: Text("Login failed."));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
-
   }
 
   @override
@@ -131,6 +130,22 @@ class _State extends State<LoginScreen> {
       ),
     );
 
+
+    final skipButton = Padding(
+      padding: EdgeInsets.only(top: 16, bottom: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton(
+            onPressed: () {
+              Get.offAll(MainScreen());
+            },
+            child: Text("រំលង"),
+          ),
+        ],
+      ),
+    );
+
     final noAccountButton = Padding(
       padding: EdgeInsets.only(top: 16, bottom: 16),
       child: Row(
@@ -185,6 +200,7 @@ class _State extends State<LoginScreen> {
             forgetPasswordButton,
             SizedBox(height: 10),
             loginButton,
+            skipButton,
             noAccountButton,
             _orSocialWidget,
             _facebookAndGoogle,

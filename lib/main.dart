@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mad/data/db_manager.dart';
 import 'package:mad/data/file_storage_manager.dart';
 import 'package:mad/data/shared_pref_manager.dart';
+import 'package:mad/firebase_options.dart';
 import 'package:mad/screens/home_screen.dart';
 import 'package:mad/screens/startup_screen.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,18 +15,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DBManager.instance.database;
-  // await FileStorageManager.instance.initFileStorage();
-  // await FileStorageManager.instance.saveToFileStorage("bookId=1,price=10000,qty=1");
-  // List<String> items = await FileStorageManager.instance.readFromFileStorage();
-  // for(String i in items){
-  //   print("Items $i");
-  // }
+
+  // Configure with Firebase
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform
+  );
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-
-   MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

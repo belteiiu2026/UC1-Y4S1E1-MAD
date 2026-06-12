@@ -1,7 +1,11 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mad/data/shared_pref_manager.dart';
 import 'package:mad/screens/login_screen.dart';
+import 'package:mad/screens/main_screen.dart';
+import 'package:mad/services/auth_service.dart';
 import 'package:mad/widgets/app_logo.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -23,16 +27,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _onRegisterHandler() async {
-    String fullName = fullNameCtrl.text;
-    String username = usernameCtrl.text;
-    String password = passwordCtrl.text;
+    String fullName = fullNameCtrl.text.trim();
+    String username = usernameCtrl.text.trim();
+    String password = passwordCtrl.text.trim();
     print("fullName : $fullName , Username : $username, Password : $password");
-    await SharedPrefManager.instance.savePref("fullName", fullName);
-    await SharedPrefManager.instance.savePref("username", username);
-    await SharedPrefManager.instance.savePref("password", password);
-    final snackBar = SnackBar(content: Text("Register success."));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    _navigateToLogin();
+
+    UserCredential userCredential = await AuthService.instance.registerWithEmailAndPassword(username, password);
+    if(userCredential.user != null){
+      userCredential.user!.updateDisplayName(fullName);
+      final snackBar = SnackBar(content: Text("Register success."));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }else{
+      final snackBar = SnackBar(content: Text("Register failure."));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   @override
@@ -104,6 +112,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
 
+    final skipButton = Padding(
+      padding: EdgeInsets.only(top: 16, bottom: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextButton(
+            onPressed: () {
+              Get.offAll(MainScreen());
+            },
+            child: Text("រំលង"),
+          ),
+        ],
+      ),
+    );
+
+
     final noAccountButton = Padding(
       padding: EdgeInsets.only(top: 16, bottom: 16),
       child: Row(
@@ -151,6 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             forgetPasswordButton,
             SizedBox(height: 10),
             registerButton,
+            skipButton,
             noAccountButton,
             _orSocialWidget,
             _facebookAndGoogle
