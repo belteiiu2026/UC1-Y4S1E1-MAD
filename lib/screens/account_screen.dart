@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:mad/data/shared_pref_manager.dart';
 import 'package:mad/screens/login_screen.dart';
@@ -17,11 +18,24 @@ class _AccountScreenState extends State<AccountScreen> {
 
   String fullName = "Guest";
   bool isCurrentUserLogin = false;
+  String imageUrl = "assets/images/default-avatar-profile.avif";
 
   @override
   void initState() {
     super.initState();
     _loadCurrentUser();
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async{
+    final u = await FacebookAuth.instance.getUserData(
+        fields: "email,name,picture.width(200)",
+    );
+    print('Email: ${u['email']}');
+    print('Picture:${u['picture']['data']['url']}');
+    setState(() {
+       imageUrl = "${u['picture']['data']['url']}";
+    });
   }
 
   Future<void> _loadCurrentUser() async{
@@ -43,6 +57,7 @@ class _AccountScreenState extends State<AccountScreen> {
     User? user = await AuthService.instance.getCurrentUser();
     if(user != null){
        await AuthService.instance.logout();
+       await FacebookAuth.instance.logOut();
        Get.offAll(MainScreen());
     }
   }
@@ -76,9 +91,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(
-                          'assets/images/default-avatar-profile.avif',
-                        ),
+                        image: isCurrentUserLogin ? NetworkImage(imageUrl) : AssetImage(imageUrl,) ,
                       ),
                       borderRadius: BorderRadius.circular(50),
                     ),

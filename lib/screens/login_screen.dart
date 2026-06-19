@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:mad/data/shared_pref_manager.dart';
 import 'package:mad/screens/home_screen.dart';
@@ -29,6 +30,25 @@ class _State extends State<LoginScreen> {
       setState(() {
         _isEmailValid = false;
       });
+    }
+  }
+
+
+  Future<void> _facebookLoginHandler() async {
+    LoginResult result = await FacebookAuth.instance.login();
+    if(result.status == LoginStatus.success){
+      // Create Credential
+      OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
+      // SignIn With Credential
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      if(userCredential.user != null){
+        final snackBar = SnackBar(content: Text("Login success."));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Get.offAll(MainScreen());
+      }
+    }else{
+      final snackBar = SnackBar(content: Text("${result.message}"));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -179,7 +199,7 @@ class _State extends State<LoginScreen> {
     final _facebookAndGoogle = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.facebook, color: Colors.blue),
+        IconButton(onPressed: _facebookLoginHandler, icon: Icon(Icons.facebook, color: Colors.blue)),
         Icon(Icons.g_mobiledata_outlined, color: Colors.red, size: 40),
       ],
     );
